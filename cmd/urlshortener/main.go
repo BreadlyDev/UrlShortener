@@ -4,11 +4,11 @@ import (
 	"log/slog"
 	"os"
 	"urlshortener/internal/config"
+	mwLogger "urlshortener/internal/http-server/middleware/logger"
 	"urlshortener/internal/lib/logger/sl"
 	"urlshortener/internal/storage/sqlite"
 	"urlshortener/internal/utils/logger"
 
-	"github.com/docker/docker/api/server/middleware"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
@@ -32,7 +32,7 @@ func main() {
 
 	router.Use(middleware.RequestID)
 	router.Use(middleware.Logger)
-	_ = router
+	router.Use(mwLogger.New(log))
 
 	// middleware
 
