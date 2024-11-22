@@ -7,6 +7,10 @@ import (
 	"urlshortener/internal/lib/logger/sl"
 	"urlshortener/internal/storage/sqlite"
 	"urlshortener/internal/utils/logger"
+
+	"github.com/docker/docker/api/server/middleware"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 func main() {
@@ -23,6 +27,14 @@ func main() {
 	}
 
 	_ = storage
+
+	router := chi.NewRouter()
+
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	_ = router
+
+	// middleware
 
 	// TODO: init storage: sqlite
 
