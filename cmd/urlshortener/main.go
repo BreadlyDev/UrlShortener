@@ -2,9 +2,11 @@ package main
 
 import (
 	"log/slog"
+	"net/http"
 	"os"
 	"urlshortener/internal/config"
 	mwLogger "urlshortener/internal/http-server/middleware/logger"
+	"urlshortener/internal/http-server/middleware/logger/handlers/url/save"
 	"urlshortener/internal/lib/logger/sl"
 	"urlshortener/internal/storage/sqlite"
 	"urlshortener/internal/utils/logger"
@@ -36,11 +38,21 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
-	// middleware
+	router.Post("/url", save.New(log, storage))
 
-	// TODO: init storage: sqlite
+	log.Info("starting server", slog.String("address", cfg.Address))
 
-	// TODO: init router: chi, "chi render"
+	srv := &http.Server{
+		Addr:         cfg.Address,
+		Handler:      router,
+		ReadTimeout:  cfg.HTTPServer.Timeout,
+		WriteTimeout: cfg.HTTPServer.Timeout,
+		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
+	}
 
-	// TODO: run server
+	if err := srv.ListenAndServe(); err != nil {
+		log.Error("failed to start server")
+	}
+
+	log.Error("server stopped")
 }
