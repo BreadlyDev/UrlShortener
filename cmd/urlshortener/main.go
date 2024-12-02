@@ -6,6 +6,7 @@ import (
 	"os"
 	"urlshortener/internal/config"
 	mwLogger "urlshortener/internal/http-server/middleware/logger"
+	"urlshortener/internal/http-server/middleware/logger/handlers/redirect"
 	"urlshortener/internal/http-server/middleware/logger/handlers/url/save"
 	"urlshortener/internal/lib/logger/sl"
 	"urlshortener/internal/storage/sqlite"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"golang.org/x/tools/godoc/redirect"
 )
 
 func main() {
