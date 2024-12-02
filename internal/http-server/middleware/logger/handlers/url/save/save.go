@@ -28,9 +28,6 @@ const aliasLength = 6
 
 type URLSaver interface {
 	CreateURL(urlToSave string, alias string) (int64, error)
-	GetURL(alias string) (string, error)
-	UpdateURL(urlToChange string, alias string) error
-	DeleteURL(alias string) error
 }
 
 func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
